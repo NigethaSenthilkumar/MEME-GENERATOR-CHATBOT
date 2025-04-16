@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meme Generator Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #4285f4;
+            text-align: center;
+        }
+        .meme-form {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background: #3367d6;
+        }
+        #text-inputs {
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Meme Generator Chatbot</h1>
+    
+    <div class="meme-form">
+        <form method="POST">
+            <label for="template">Select Meme Template:</label>
+            <select id="template" name="template" required>
+                <option value="">-- Choose a Template --</option>
+                {% for template in templates %}
+                <option value="{{ template }}">{{ template|title }}</option>
+                {% endfor %}
+            </select>
+            
+            <div id="text-inputs">
+                <!-- Dynamic text inputs will appear here -->
+            </div>
+            
+            <button type="submit">Generate Meme</button>
+        </form>
+    </div>
+
+    <script>
+        // Template configuration
+        const templateConfig = {
+            'drake': {
+                boxes: 2,
+                placeholders: ['Top text', 'Bottom text']
+            },
+            'distracted_bf': {
+                boxes: 3,
+                placeholders: ['Left text', 'Middle text', 'Right text']
+            }
+        };
+
+        // Update form when template changes
+        document.getElementById('template').addEventListener('change', function() {
+            const template = this.value;
+            const config = templateConfig[template] || {boxes: 0};
+            const container = document.getElementById('text-inputs');
+            
+            container.innerHTML = '';
+            
+            for (let i = 0; i < config.boxes; i++) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = 'text[]';
+                input.placeholder = config.placeholders?.[i] || `Text ${i+1}`;
+                input.required = true;
+                container.appendChild(input);
+                container.appendChild(document.createElement('br'));
+            }
+        });
+    </script>
+</body>
+</html>
